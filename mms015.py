@@ -5,31 +5,31 @@ unitTypes = Enum("UnitTypes", [("quantity", 1), ("price", 2)])
 
 def makeUnit(factor, unit, basicUnit, salesPriceUnit, procurmentUnit):
 
-    conversionForm = 1
-
-    if unit == basicUnit:
+    conversionForm = 1  # 1 = multiplied
+    AUS1 = 0
+    AUS2 = 0
+    AUS5 = 0
+    AUS9 = 0
+    if (
+        unit == basicUnit
+    ):  # adding the flag this is the basic unit, and checking that it is 1. Else ValueError is raised
         if factor != 1:
-            raise ValueError("ERROR IN FACTOR NEEDS TO BE 1")
+            raise ValueError("ERROR IN BASICUNIT FACTOR NEEDS TO BE 1")
         AUS1 = 1
-    else:
-        AUS1 = 0
 
-    if unit == procurmentUnit: # legger inn enhets flagg
+    if unit == procurmentUnit:  # add the flag this is the procurment unit
         AUS2 = 1
-    else:
-        AUS2 = 0
 
-    if unit == salesPriceUnit: # legger inn pris flagg
+    if unit == salesPriceUnit:  # adding the flag this is the salesprice unit
         AUS5 = 1
         AUS9 = 1
         if factor != 1:
-            factor = round(1/factor,3) # endrer faktor slik at salgsenhet kan deles (round slik at det ikke bli float feil)
-            conversionForm = 2 # settere converterings type flagg
-    else:
-        AUS5 = 0
-        AUS9 = 0
-    
-    for type in unitTypes:
+            factor = round(
+                1 / factor, 5
+            )  # converting factor for the salesprice unit so it can be devided instead of multiplied
+            conversionForm = 2  # swaping conversion form to 2 = divide
+
+    for type in unitTypes:  # Printing each type as they would be sent to the API
         type = type.value
         if type == 1:
             print(
@@ -41,28 +41,28 @@ def makeUnit(factor, unit, basicUnit, salesPriceUnit, procurmentUnit):
             )
 
 
-basicUnit: str = "PAK"
-salesPriceUnit: str = "LM"
-procurmentUnit = "PAK"
+basicUnit: str = "STK"
+salesPriceUnit: str = "STK"
+procurmentUnit = "STK"
 
 makeUnit(
     factor=1,
-    unit="PAK",
+    unit="STK",
     basicUnit=basicUnit,
     salesPriceUnit=salesPriceUnit,
     procurmentUnit=procurmentUnit,
 )
 
 makeUnit(
-    factor=0.277777778,
-    unit="LM",
+    factor=4,
+    unit="KRT",
     basicUnit=basicUnit,
     salesPriceUnit=salesPriceUnit,
     procurmentUnit=procurmentUnit,
 )
 
 makeUnit(
-    factor=165,
+    factor=12,
     unit="PAL",
     basicUnit=basicUnit,
     salesPriceUnit=salesPriceUnit,
