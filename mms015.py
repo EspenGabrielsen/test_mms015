@@ -1,9 +1,9 @@
 from enum import Enum
 
 unitTypes = Enum("UnitTypes", [("quantity", 1), ("price", 2)])
+pricecomparisonType = Enum("PriceComparison",[("pricecomparison",7)])
 
-
-def makeUnit(factor, unit, basicUnit, salesPriceUnit, procurmentUnit):
+def makeUnit(factor, unit, basicUnit, salesPriceUnit, procurmentUnit, packageType="",altFactor=1):
 
     conversionForm = 1  # 1 = multiplied
     AUS1 = 0
@@ -28,21 +28,29 @@ def makeUnit(factor, unit, basicUnit, salesPriceUnit, procurmentUnit):
                 1 / factor, 5
             )  # converting factor for the salesprice unit so it can be devided instead of multiplied
             conversionForm = 2  # swaping conversion form to 2 = divide
-
-    for type in unitTypes:  # Printing each type as they would be sent to the API
-        type = type.value
-        if type == 1:
-            print(
-                f"Type:{type}\nFactor: {factor:5} Unit:{unit:3} Aus1:{AUS1} Aus2:{AUS2} Conversion_Form:{conversionForm}"
+    
+    if packageType == "PSE-PAK":
+        type = pricecomparisonType.pricecomparison.value
+        factor = altFactor
+        conversionForm = 1
+        print(
+                f"Type:{type}\nFactor: {factor:5} Unit:{unit:3} Conversion_Form: {conversionForm}\n"
             )
-        else:
-            print(
-                f"Type:{type}\nFactor: {factor:5} Unit:{unit:3} Aus5:{AUS5} Aus9:{AUS9} Conversion_Form:{conversionForm}\n"
-            )
+    else:
+        for type in unitTypes:  # Printing each type as they would be sent to the API
+            type = type.value
+            if type == 1:
+                print(
+                    f"Type:{type}\nFactor: {factor:5} Unit:{unit:3} AUS1:{AUS1} AUS2:{AUS2} Conversion_Form: {conversionForm}"
+                )
+            else:
+                print(
+                    f"Type:{type}\nFactor: {factor:5} Unit:{unit:3} AUS5:{AUS5} AUS9:{AUS9} Conversion_Form: {conversionForm}\n"
+                )
 
 
 basicUnit: str = "STK"
-salesPriceUnit: str = "STK"
+salesPriceUnit: str = "M2"
 procurmentUnit = "STK"
 
 makeUnit(
@@ -51,14 +59,17 @@ makeUnit(
     basicUnit=basicUnit,
     salesPriceUnit=salesPriceUnit,
     procurmentUnit=procurmentUnit,
+    packageType="F-PAK",
+    altFactor=3.57
 )
-
 makeUnit(
-    factor=4,
-    unit="KRT",
+    factor=0.280112045,
+    unit="M2",
     basicUnit=basicUnit,
     salesPriceUnit=salesPriceUnit,
     procurmentUnit=procurmentUnit,
+    packageType="",
+    altFactor=1
 )
 
 makeUnit(
@@ -67,4 +78,15 @@ makeUnit(
     basicUnit=basicUnit,
     salesPriceUnit=salesPriceUnit,
     procurmentUnit=procurmentUnit,
+    packageType="D-PAK",
+    altFactor=42.84
+)
+makeUnit(
+    factor=0.280112045,
+    unit="M2",
+    basicUnit=basicUnit,
+    salesPriceUnit=salesPriceUnit,
+    procurmentUnit=procurmentUnit,
+    packageType="PSE-PAK",
+    altFactor=1
 )
